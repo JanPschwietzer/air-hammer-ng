@@ -1,0 +1,28 @@
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "air-hammer-ng"
+version = "1.0.0"
+description = "A WPA Enterprise horizontal brute-force attack tool"
+readme = "README.md"
+requires-python = ">=3.6"
+license = {text = "MIT"}
+authors = [
+    { name = "Michael 'Wh1t3Rh1n0' Allen" },
+    { name = "Jan Phillip Schwietzer" }
+]
+keywords = ["wpa", "enterprise", "wifi", "security", "bruteforce"]
+dependencies = [
+    "wpa_supplicant",
+    "Twisted"
+]
+
+[project.urls]
+Homepage = "http://mikeallen.org/blog/2016-10-06-breaking-into-wpa-enterprise-networks-with-air-hammer/"
+Repository = "https://github.com/digidotcom/python-wpa-supplicant"
+
+[project.scripts]
+# The command 'air-hammer-ng' is calling the 'main' function in 'air_hammer_ng.py'
+air-hammer-ng = "air_hammer_ng:main"
