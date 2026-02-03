@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 import argparse
 import datetime
 import time
@@ -27,7 +25,7 @@ def connect_to_wifi(ssid, password, username,
                     authentication="wpa-enterprise"):
     valid_credentials_found = False
 
-    print "Trying %s:%s..." % (username, password)
+    print("Trying %s:%s..." % (username, password))
 
     # WPA Enterprise configuration
     if authentication == "wpa-enterprise":
@@ -63,15 +61,15 @@ def connect_to_wifi(ssid, password, username,
             if state == "completed":
                 credentials_valid = 1
                 break
-        except Exception, e:
-            print e
+        except Exception as e:
+            print(e)
             break
 
         time.sleep(test_interval)   
         seconds_passed += test_interval
 
     if credentials_valid == 1:
-        print "[!] VALID CREDENTIALS: %s:%s" % (username, password)
+        print("[!] VALID CREDENTIALS: %s:%s" % (username, password))
         if outfile:              
             f = open(outfile, 'a')
 
@@ -133,11 +131,11 @@ args = parser.parse_args()
 
 
 if (args.password == None) and (args.passfile == None):
-    print "You must specify a password or password list."
+    print("You must specify a password or password list.")
     exit()
 
 if (args.start != 0) and (args.passfile != None):
-    print "The start line option may not be used with a password list."
+    print("The start line option may not be used with a password list.")
     exit()
 
 device          = args.device
@@ -190,7 +188,7 @@ f.close()
 try:
     for password in passwords:
         for n in range(start, len(users)):
-            print "[%s] " % n,
+            print("[%s] " % n, end=' ')
             valid_credentials_found = connect_to_wifi(ssid=ssid, 
                                                       username=str(users[n]), 
                                                       password=str(password), 
@@ -208,15 +206,13 @@ try:
     if reactor.running == True:
             reactor.sigBreak()
 
-    print "DONE!"
+    print("DONE!")
 except KeyboardInterrupt:
     # Stop the running reactor so the program can exit
     if reactor.running == True:
         reactor.sigBreak()
-    print "Attack stopped by user."
-except Exception, e:
-    print e
+    print("Attack stopped by user.")
+except Exception as e:
+    print(e)
     if reactor.running == True:
         reactor.sigBreak()
-
-
