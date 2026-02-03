@@ -106,7 +106,10 @@ parser.add_argument('-i', type=str, required=True, metavar='interface',
                     dest='device', help='Wireless interface')
 parser.add_argument('-e', type=str, required=True,
                     dest='ssid', help='SSID of the target network')
-parser.add_argument('-u', type=str, required=True, dest='userfile', 
+user_group = parser.add_mutually_exclusive_group(required=True)
+user_group.add_argument('-U', type=str, dest='username', 
+                    help='Username to try with each password')
+user_group.add_argument('-u', type=str, dest='userfile', 
                     help='Username wordlist')
 parser.add_argument('-P', dest='password', default=None,
                     help='Password to try on each username')
@@ -140,6 +143,7 @@ if (args.start != 0) and (args.passfile != None):
 
 device          = args.device
 ssid            = args.ssid
+username        = args.username
 userfile        = args.userfile
 password        = args.password
 passfile        = args.passfile
@@ -181,9 +185,17 @@ except:
 
 
 # Read usernames into array, users
-f = open(userfile, 'r')
-users = [l.rstrip() for l in f.readlines()]
-f.close()
+users = []
+if userfile:
+    try:
+        f = open(userfile, 'r')
+        users = [l.rstrip() for l in f.readlines()]
+        f.close()
+    except FileNotFoundError:
+        print(f"Fehler: Benutzerdatei '{userfile}' nicht gefunden.")
+        sys.exit(1)
+else:
+    users = [username]
 
 try:
     for password in passwords:
