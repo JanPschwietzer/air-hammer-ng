@@ -115,6 +115,8 @@ parser.add_argument('-P', dest='password', default=None,
                     help='Password to try on each username')
 parser.add_argument('-p', dest='passfile', default=None,
                     help='List of passwords to try for each username')
+parser.add_argument('-d', type=str, default=None, dest='domain',
+                    help='Domain to prepend (format: DOMAIN\\username)')
 parser.add_argument('-s', type=int, default=0, dest='start', metavar='line',
                     help='Optional start line to resume attack. May not be used with a password list.')
 parser.add_argument('-w', type=str, default=None, dest='outfile', 
@@ -147,6 +149,7 @@ username        = args.username
 userfile        = args.userfile
 password        = args.password
 passfile        = args.passfile
+domain          = args.domain
 start           = args.start
 outfile         = args.outfile
 stop_on_success = args.stop_on_success
@@ -201,8 +204,12 @@ try:
     for password in passwords:
         for n in range(start, len(users)):
             print("[%s] " % n, end=' ')
+            current_username = str(users[n])
+            if domain:
+                current_username = "%s\\%s" % (domain, current_username)
+
             valid_credentials_found = connect_to_wifi(ssid=ssid, 
-                                                      username=str(users[n]), 
+                                                      username=current_username, # Hier geänderte Variable nutzen
                                                       password=str(password), 
                                                       interface=interface,
                                                       supplicant=supplicant, 
